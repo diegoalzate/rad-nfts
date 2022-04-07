@@ -6,10 +6,22 @@
   "repository": "git@github.com:diegoalzate/rad-nfts.git",
   "author": "Diego Alzate <diego35.da@gmail.com>",
   "scripts": {
-    "start": "yarn workspace client start"
+    "start": "yarn workspace client start",
+    "compile": "yarn workspace hardhat compile",
+    "deploy": "yarn workspace hardhat deploy"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@graphprotocol/graph-ts",
+      "**/@graphprotocol/graph-ts/**",
+      "**/hardhat",
+      "**/hardhat/**",
+      "**/hardhat-ts",
+      "**/hardhat-ts/**"
+    ]
+  },
   "license": "MIT"
 }
