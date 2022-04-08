@@ -18,7 +18,7 @@ contract RadNFT is ERC721URIStorage {
     string[] secondWords = ["Ferrari", "Mercedes", "RedBull", "Alpine", "Haas", "Alfa", "AlphaTauri", "McLaren", "AstonMartin", "Williams", "Lotus", "Renault", "Maserati", "Toyota", "Honda", "Porsche", "Ford"];
     string[] thirdWords = ["Leclerc", "Sainz", "Verstappen", "Russell", "Hamilton", "Ocon", "Perez", "Magnussen", "Bottas", "Norris", "Tsunoda", "Gasly", "Alonso", "Zhou", "Schumacher", "Ricciardo", "Vettel"];
     constructor() ERC721("RadNFT", "RAD") {
-        console.log("This is my Rad NFT");
+        console.log("This is Rad");
     }
 
     function pickRandomWord(uint256 tokenId, string[] memory words) public pure returns (string memory){

@@ -6,9 +6,10 @@
   "repository": "git@github.com:diegoalzate/rad-nfts.git",
   "author": "Diego Alzate <diego35.da@gmail.com>",
   "scripts": {
-    "start": "yarn workspace client start",
-    "compile": "yarn workspace hardhat compile",
-    "deploy": "yarn workspace hardhat deploy"
+    "start": "yarn workspace @packages/client start",
+    "compile": "yarn workspace @packages/hardhat compile",
+    "chain": "yarn workspace @packages/hardhat chain",
+    "deploy": "yarn workspace @packages/hardhat deploy"
   },
   "workspaces": {
     "packages": [
