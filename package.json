@@ -9,7 +9,9 @@
     "start": "yarn workspace @packages/client start",
     "compile": "yarn workspace @packages/hardhat compile",
     "chain": "yarn workspace @packages/hardhat chain",
-    "deploy": "yarn workspace @packages/hardhat deploy"
+    "deploy": "yarn workspace @packages/hardhat deploy",
+    "deploy:rinkeby": "yarn workspace @packages/hardhat deploy:rinkeby",
+    "clean": "yarn workspace @packages/hardhat clean"
   },
   "workspaces": {
     "packages": [

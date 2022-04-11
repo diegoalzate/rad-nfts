@@ -1,0 +1,10 @@
+{
+    "localhost": {
+        "name": "localhost",
+        "id": 31337
+    },
+    "rinkeby": {
+        "name": "rinkeby",
+        "id": 4
+    }
+}

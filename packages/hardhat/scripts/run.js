@@ -11,6 +11,10 @@ const main = async () => {
   txn = await nftContract.makeARadNFT()
 
   await txn.wait()
+
+  const amount = await nftContract.getTotalMinted()
+
+  console.log(amount)
 }
 
 const runMain = async () => {
