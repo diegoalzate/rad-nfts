@@ -235,6 +235,13 @@ const App = () => {
             : !currentAccount
             ? renderNotConnectedContainer()
             : renderMintUI()}
+          
+          <div>
+          <a href="https://testnets.opensea.io/collection/radnft-a8tgxbnjp2">
+            <button className="cta-button opensea-button">
+            Check out the collection on Opensea</button>
+          </a>
+          </div>
           {openseaLink && (
             <div className="gradient-text">
               <a href={openseaLink}> Check out the nft here </a>
