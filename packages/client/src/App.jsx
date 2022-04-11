@@ -13,23 +13,24 @@ const TOTAL_MINT_COUNT = 50;
 const chainId = Number(config.rinkeby.id);
 const contractAddress = contracts[chainId][0].contracts.RadNFT.address;
 const contractABI = contracts[chainId][0].contracts.RadNFT.abi;
+const rinkebyChainId = "0x4";
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [openseaLink, setOpenSeaLink] = useState("");
   const [totalTokens, setTotalTokens] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const [notOnNetwork, setNotOnNetwork] = useState(false);
   useEffect(() => {
     checkifWalletIsConnected();
   }, []);
 
   useEffect(() => {
-    getTotalTokens()
-  }, [])
+    getTotalTokens();
+  }, []);
 
   useEffect(() => {
-    checkNetwork()
-  }, [])
+    checkNetwork();
+  }, []);
 
   const getTotalTokens = async () => {
     try {
@@ -47,18 +48,16 @@ const App = () => {
         console.log("Going to pop wallet now to pay gas...");
         let totalTokens = await connectedContract.getTotalMinted();
 
-        setTotalTokens(totalTokens)
+        setTotalTokens(totalTokens);
 
-        console.log(
-          `total tokens: ${totalTokens}`
-        );
+        console.log(`total tokens: ${totalTokens}`);
       } else {
         console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const checkifWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -109,8 +108,8 @@ const App = () => {
         setOpenSeaLink(
           `https://testnets.opensea.io/assets/${contractAddress}/${tokenId.toNumber()}`
         );
-        setLoading(false)
-        getTotalTokens()
+        setLoading(false);
+        getTotalTokens();
       });
     }
   };
@@ -143,21 +142,21 @@ const App = () => {
       console.log("We have an ethereum object", ethereum);
     }
 
-    let chainId = await ethereum.request({method: 'eth_chainId'})
+    let chainId = await ethereum.request({ method: "eth_chainId" });
 
     // String, hex code of the chainId of the Rinkebey test network
-    const rinkebyChainId = "0x4"; 
     if (chainId !== rinkebyChainId) {
       alert("You are not connected to the Rinkeby Test Network!");
+      setNotOnNetwork(true);
     }
-  }
+  };
 
   const askContractToMintNft = async () => {
     try {
       const { ethereum } = window;
       if (ethereum) {
-        setLoading(true)
-        setOpenSeaLink('')
+        setLoading(true);
+        setOpenSeaLink("");
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const connectedContract = new ethers.Contract(
@@ -180,6 +179,20 @@ const App = () => {
     }
   };
 
+  const changeNetworkToRinkeby = async () => {
+    const { ethereum } = window;
+
+    if (ethereum) {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: rinkebyChainId }],
+      });
+      setNotOnNetwork(false);
+    } else {
+      alert("Install Metamask to interact with this site");
+    }
+  };
+
   const renderNotConnectedContainer = () => (
     <button
       onClick={connectWallet}
@@ -192,24 +205,41 @@ const App = () => {
   const renderMintUI = () => (
     <button
       onClick={askContractToMintNft}
-      className="cta-button connect-wallet-button"
+      className="cta-button mint-button"
       disabled={loading}
     >
       {loading ? "Minting..." : "Mint NFT"}
     </button>
   );
 
+  const renderConnectToNetwork = () =>
+    notOnNetwork && (
+      <button
+        onClick={changeNetworkToRinkeby}
+        className="cta-button connect-wallet-button connect-network"
+        disabled={loading}
+      >
+        Connect to Rinkeby network
+      </button>
+    );
+
   return (
     <div className="App">
       <div className="container">
         <div className="header-container">
           <p className="header gradient-text">Rad NFT Collection</p>
-          <p className="sub-text">{`Total Minted: ${totalTokens}/${TOTAL_MINT_COUNT}`}</p>
+          <p className="mint-count">{`Total Minted: ${totalTokens}/${TOTAL_MINT_COUNT}`}</p>
           <p className="sub-text">Unique NFTs with F1 drivers and companies.</p>
-          {!currentAccount ? renderNotConnectedContainer() : renderMintUI()}
-          {openseaLink && <div className="gradient-text">
-            <a href={openseaLink}> Check out the nft here </a>
-            </div>}
+          {notOnNetwork
+            ? renderConnectToNetwork()
+            : !currentAccount
+            ? renderNotConnectedContainer()
+            : renderMintUI()}
+          {openseaLink && (
+            <div className="gradient-text">
+              <a href={openseaLink}> Check out the nft here </a>
+            </div>
+          )}
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
@@ -221,9 +251,9 @@ const App = () => {
           >{`built by @${TWITTER_HANDLE}`}</a>
         </div>
         <p className="footer-text">
-            {" "}
-            No rights are reserved, this is only for fun
-          </p>
+          {" "}
+          No rights are reserved, this is only for fun
+        </p>
       </div>
     </div>
   );
